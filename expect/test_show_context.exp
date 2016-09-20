@@ -1,0 +1,48 @@
+#!/usr/bin/env expect
+
+spawn luajit expect/example.lua
+
+set timeout 1
+
+proc abort {} { exit 1 }
+
+# show context and prompt:
+expect {
+  timeout abort
+  "\r
+From: expect/example.lua @ line 7\r
+\r
+     2: local b = 2\r
+     3: \r
+     4: assert(a ~= b)\r
+     5: \r
+     6: local function f(x)\r
+ =>  7: 	require('resty.repl').start()\r
+     8: 	print('x arg: ' .. tostring(x))\r
+     9: end\r
+    10: \r
+    11: f(123)\r
+\r
+\\\[1\\\] lua(main)> "
+}
+
+# show the value of argument "x":
+send "x\r"
+expect {
+  timeout abort
+  "=> 123\r\n\\\[2\\\] lua(main)> "
+}
+
+# override the value of argument "x":
+send "x = 11\r"
+expect {
+  timeout abort
+  "=> nil\r\n\\\[3\\\] lua(main)> "
+}
+
+# exit from repl and see script output:
+send "exit\r"
+expect {
+  timeout abort
+  "x arg: 11\r\n"
+}

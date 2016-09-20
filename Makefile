@@ -11,7 +11,7 @@ push_images:
 	docker push saksmlz/openresty-testsuite:latest
 	docker push saksmlz/lua51-testsuite:latest
 
-test: test_openresty test_luajit test_lua51
+test: test_openresty test_luajit test_lua51 test_with_expect
 
 test_openresty:
 	@echo OPENRESTY:
@@ -25,6 +25,9 @@ test_lua51:
 	@echo LUA5.1:
 	@docker-compose run --rm lua51 bin/lua51test
 
+test_with_expect:
+	@docker-compose run --rm expect
+
 shell:
 	docker-compose run --rm app
 
@@ -35,4 +38,4 @@ repl:
 			-I vendor/ \
 			-e 'require("resty.repl").start()'
 
-.PHONY: lint test shell repl build push_images test_openresty test_luajit test_lua51
+.PHONY: lint test shell repl build push_images test_openresty test_luajit test_lua51 test_with_expect

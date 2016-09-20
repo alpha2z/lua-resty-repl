@@ -6,6 +6,17 @@ app:
     - ".:/lua-resty-repl"
   working_dir: "/lua-resty-repl"
 
+expect:
+  image: "saksmlz/openresty-testsuite:latest"
+  command:
+    - bash
+    - -c
+    - luarocks make lua-resty-repl-scm-0.rockspec > /dev/null && expect ./expect/test_show_context.exp > /dev/null
+  container_name: "lua-resty-repl-tests"
+  volumes:
+    - ".:/lua-resty-repl"
+  working_dir: "/lua-resty-repl"
+
 lua51:
   image: "saksmlz/lua51-testsuite:latest"
   command: "sh"
