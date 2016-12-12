@@ -66,25 +66,7 @@ ffi.cdef[[
   int rl_point;
 ]]
 
--- for builds with separate libhistory:
-pcall(ffi.load, 'libhistory.so.6')
-pcall(ffi.load, 'libhistory.so.7')
-pcall(ffi.load, 'libhistory')
-
-local readline_available, clib
-
--- for linux with libreadline 6.x:
-readline_available, clib = pcall(ffi.load, 'libreadline.so.6')
-
--- for linux with libreadline 7.x:
-if not readline_available then
-  readline_available, clib = pcall(ffi.load, 'libreadline.so.7')
-end
-
--- for mac:
-if not readline_available then
-  readline_available, clib = pcall(ffi.load, 'libreadline')
-end
+local readline_available, clib = pcall(ffi.load, 'libreadline')
 
 if not readline_available then return no_readline_fallback() end
 
